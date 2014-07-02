@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Introducing Akka</title>
+
+    <meta name="description" content="Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM.">
+    <meta name="author" content="Markus Jura">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/custom.css" id="theme">
+    <link rel="stylesheet" href="lib/css/idea.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<aside style="display: block; position: fixed; bottom: 20px; left: 20px; z-index: 30;">
+    <a href="http://typesafe.com"><img src="assets/logo.png"></a>
+</aside>
+
+<div class="reveal">
+
+<div class="slides">
+
+<!-- ########################################################################################### -->
+<!-- BEGIN
+<!-- ########################################################################################### -->
+
+<section id="content" data-markdown data-background="#53cdec" data-state="h2Uppercase"><script type="text/template">
+## Introducing Akka
+
+### Markus Jura
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section>
+<h2>About me</h2>
+
+<ul>
+    <li>Trainer <a href="http://typesafe.com">@Typesafe</a></li>
+    <li>Living in Hamburg</li>
+    <li>Co-Founder of <a href="https://testmunk.com">testmunk</a></li>
+    <li>3 years Scala, 10 years Java background</li>
+</ul>    
+<div>
+    <a href="https://twitter.com/markusjura" class="twitter-follow-button" data-show-count="true">Follow @markusjura</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    <iframe src="http://ghbtns.com/github-btn.html?user=markusjura&type=follow&count=false"
+    allowtransparency="true" frameborder="0" scrolling="0" width="165" height="20"></iframe>
+</div>  
+</section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Akka (Áhkká)
+
+<blockquote>The name comes from the goddess in the Sami (Native swedes) mythology that represents all the wisdom and beauty in the world.</blockquote>
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Akka (Áhkká)
+
+![Akka Mountain](assets/mountain.png "akka-mountain")
+
+<blockquote>It is also the name of a beautiful mountain in Laponia in the north part of Sweden.</blockquote>
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## What is Akka?
+
+<blockquote>Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM.</blockquote>
+<small>[akka.io](http://akka.io)</small>
+</script></section>
+
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Akka&#39;s Value Proposition
+
+A single **unified** programming model for
+
+- simpler concurrency
+- simpler distribution
+- simpler fault tolerance
+</script></section>
+
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Manage System Overload
+
+![Manage System Overload](assets/system-overload.png "manage-system-overload")
+</script></section>
+
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Scale Up & Scale Out
+
+![Scaling](assets/scaling.png "scaling")
+</script></section>
+
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Program at Higher Level I
+
+- Never think about
+  - Shared state
+  - Threads
+  - Locks
+- Low level concurrency becomes simple
+  - Think how messages flow in the system
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Program at Higher Level II
+
+- High CPU utilization
+- Low latency
+- High troughput
+- Scalability
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Distributable by Design I
+
+![Distribution](assets/distribution.jpg "Distribution")
+
+- Everything in Akka is **distributed by default**
+  - Going from local to remote by configuration
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Distributable by Design II
+
+- Perfect Programming Model for the Cloud
+  - Elastic & dynamic
+  - Fault-tolerant & self-healing
+  - Load-Balancing & cluster rebalancing
+- Loosly coupled and dynamic systems that can change and adapt at runtime  
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Selection of Akka Production Users
+
+![Clients](assets/clients.png "Clients")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## How can we achieve this?
+
+![How](assets/how.png "How")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section fullscreen-img="assets/brain.png" fullscreen-size="contain">
+<h1 style="color: white">Let&#39;s use Actors!</h1>
+</section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Carl Hewitt&#39;s definition?
+
+- The fundamental unit of computation that embodies:
+  - Processing
+  - Storage
+  - Communication 
+
+<small>[http://bit.ly/hewitt-on-actors](http://bit.ly/hewitt-on-actors)</small>
+
+- Invented 1973 by Carl Hewitt
+- Akka:
+  - Processing &#x2192; Behavior
+  - Storage &#x2192; State
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## What is an Actor?
+
+- Java / Scala Class 
+  - With a mailbox (Queue)
+  - Receives messages
+  - Only one message at a time is handled
+  - Extremely lightweight (400 Bytes / 2.7 Million per GB)
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Virtual Machines](assets/actors-vm.png "Virtual Machines")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Black Boxes](assets/actors-blackbox.png "Black Boxes")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Memory and Behavior](assets/actors-memory.png "Memory and Behavior")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Communication](assets/actors-communication.png "Communication")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Grow](assets/actors-grow.png "Grow")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Shrink](assets/actors-shrink.png "Shrink")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+![Hot Deploy](assets/actors-deploy.png "Hot Deploy")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+Now - if we replace
+
+![Replace VM with Actor](assets/actors-replace.png "Replace VM with Actor")
+
+Everthing will still hold for both **local** and **distributed** Actors
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## What can I use Actors for?
+
+- Can be an alternative to:
+  - Thread
+  - Object instance or component
+  - Callback or listener
+  - Singleton or service
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## What can I use Actors for?
+
+- Can be an alternative to:
+  - Router, load-Balancer or pool
+  - Java EE Session Bean or Message-Driven Bean
+  - Finite State Machine (FSM)
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Actor in Java
+
+``` java
+// Message Protocol
+public static class Greeting implements Serializable {
+  public final String who;
+  public Greeting(String who) { this.who = who; }
+}
+
+public class GreetingActor extends UntypedActor {
+  // Put mutable state in here..
+
+  public void onReceive(Object message) {
+    if(message instanceOf Greeting)
+      System.out.println("Hello " + ((Greeting) message).who);
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Actor in Scala
+
+``` scala
+// Message Protocol
+case class Greeting(who: String)
+
+class GreetingActor extends Actor {
+  // Put mutable state in here..
+
+  def receive = {
+    // Define the behavior here..
+    case Greeting(who) => println(s"Hello $who")
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## 4 Core Actor Operations
+
+- When an Actor handles a Message, it can
+  1. Create &#x2192; Create new Actors
+  2. Send &#x2192; Send messages to other Actors
+  3. Become &#x2192; Change the behavior for handling the next message
+  4. Supervise &#x2192; Manage another Actors failure
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## 1. Create
+
+- Each Actor is repesented by an *ActorRef*
+- You never get access to an *Actor* instance
+- An Actor reference let&#39;s you send messages to an Actor
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Create an Actor (Java)
+
+``` java
+// Creates an Actor system
+final ActorSystem system = ActorSystem.create("MySystem");
+
+final ActorRef greeter = 
+  system.actorOf(new Props(GreetingActor.class), "greeter");
+//       ^^ Create   ^^ Actor configuration      ^^ Actor name
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Actors can form hierarchies
+
+![Actor Hierarchy 1](assets/hierarchy-1.png "Actor Hierarchy 1")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Actors can form hierarchies
+
+![Actor Hierarchy 2](assets/hierarchy-2.png "Actor Hierarchy 2")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Actors Name Resolution
+
+![Actor Hierarchy 3](assets/hierarchy-3.png "Actor Hierarchy 3")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## 2. Send
+
+- To send a message to an actor, you need a Actor reference
+- Asynchronous and Non-blocking (Fire-and-forget)  
+
+- **Attention**: Messages must be immutable!
+- **Best practice**:
+  - Use case objects and/or case classes
+  - Define the **message protocol** in the companion object of the actor
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Troughput on a Single Machine
+
+![Throughput](assets/throughput.png "Throughput")
+
+## **+50 million** messages per second
+
+<small>[Link to Performance Test](http://letitcrash.com/post/20397701710/50-million-messages-per-second-on-a-single-machine)</small>
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Send Message (Java / Scala)
+
+Java
+``` java
+greeter.tell(new Greeting("Charlie"), ActorRef.noSender());
+```
+
+Scala
+``` scala
+greeter ! Greeting("Charlie")
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Reply (Java)
+
+``` java
+class SomeActor extends UntypedActor {
+  public void onReceive(Object msg) {
+    if(msg instanceOf User) {
+      User user = (User) msg;
+      // Reply to sender
+      getSender().tell("Hi " + user.name, getSelf());
+    }
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Reply (Scala)
+
+``` scala
+class SomeActor extends Actor {
+  def receive = {
+    // Reply to sender
+    case User(name) => sender ! (s"Hi $name")
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Remote Deployment
+
+``` hocon
+akka {
+  actor {
+    # Configure Remote Provider
+    provider = akka.remote.RemoteActorRefProvider
+    deployment {
+      /greeter {
+        # Define Remote Path
+        remote = akka://MySystem@machine1:2552
+      }
+    }
+  }
+}
+```
+- Just feed the ActorSystem with this configuration &#x2192; Zero code changes
+- You can configure the remote deployment programmatically as well
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## 3. Become
+
+- Dynamically redefining Actors behavior
+- Triggered by receiving a message
+- Will now react differently to the messages it receives
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Why would I want to do that?
+
+- Implement a Finite State Machine (FSM)
+- Let a highly contended Actor adaptively transform himself into an Actor Pool or a Router
+- Implement graceful degradation
+- Spawn up (empty) generic Worker Actors that can become whatever the Master currently needs
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Become (Java)
+
+``` java
+// Actor context available within an Actor
+getContext().become(new Procedure<Object>() {
+  public void apply(Object msg) {
+    if(msg instanceOf NewMessage) {
+      NewMessage newMsg = (NewMessage) msg;
+      ...
+    }
+  }
+});
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Become (Scala)
+
+``` scala
+context become {
+  case NewMessage => ...  
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Load Balancing
+
+![Load Balancing](assets/load-balancing.png "Load Balancing")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Routers (Java)
+
+Programmatically
+``` java
+int nrOfInstances = 5;
+ActorRef router =
+  system.actorOf(new Props(SomeActor)
+    .withRouter(new RoundRobinRouter(nrOfInstances)));
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Routers (Java)
+
+Configuration
+``` hocon
+akka.actor.deployment {
+  /myRouter {
+    router = round-robin
+    nr-of-instances = 5
+  }
+}
+```
+
+Java
+``` java
+ActorRef router =
+  system.actorOf(new Props(SomeActor)
+    .withRouter(new FromConfig(), "myRouter");
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Router with Resizer (Java)
+
+``` java
+int lowerBound = 2;
+int upperBound = 15;
+DefaultResizer resizer = new DefaultResizer(lowerBound, upperBound);
+
+ActorRef routerWithResizer = system.actorOf(
+  new Props(SomeActor.class)
+    .withRouter(new RoundRobinRouter(resizer)));
+```
+
+Resizer can be definied in configuration file as well
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Failure Management in Java/C/C# etc.
+
+![Failure Management](assets/failure-management.png "Failure Management")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Failure Management in Java/C/C# etc.
+
+- Caller handles the failure
+- This leads to **defensive** programming with:
+  - Error handling **tangled** with business logic
+  - **Scattered** all over the code base
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Failure Management in Akka
+
+- Supervisor handles failure
+  - Actor throws exception &#x2192; Supervisor react on failure
+- Callers need not care (they can&#39;t anyway)
+- Clean separation of processing and error handling
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Let&#39;s take a standard OO application
+
+![OO Application](assets/oo-application.png "OO Application")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Which components have critical important state and explicit error handling?
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+
+![OO Application - Critical State](assets/oo-application-cricital.png "OO Application - Critical State")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Error Handling in Akka
+
+![Akka Application](assets/akka-application-1.png "Akka Application")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Error Handling in Akka
+
+![Akka Application](assets/akka-application-2.png "Akka Application")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Supervisor Strategy
+
+- Every Actor has a default supervisor strategy
+  - *ActorInitializationException* &#x2192; Stop
+  - *ActorKilledException* &#x2192; Stop
+  - *Exception* &#x2192; Restart
+  - *Throwable* &#x2192; Escalate
+  - *Otherwise* &#x2192; Escalate
+
+- Strategy can be overriden  
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Override Supervisor Strategy (Java)
+
+``` java
+public class Supervisor extends UntypedActor {
+  private static SupervisorStrategy strategy =
+    new OneForOneStrategy(10, Duration.create("1 minute"),
+      new Function<Throwable, Directive>() {
+        @Override public Directive apply(Throwable t) {
+          if (t instanceof ArithmeticException)       
+            return resume();
+          else if (t instanceof NullPointerException) 
+            return restart();
+          else                                        
+            return escalate();
+        }
+      });
+...
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Override Supervisor Strategy (Java)
+
+``` java 
+...
+
+  @Override 
+  public SupervisorStrategy supervisorStrategy() {
+    return strategy;
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## Override Supervisor Strategy (Scala)
+
+``` scala 
+class Supervisor extends Actor {
+  override val supervisorStrategy = OneForOneStrategy(
+      maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    case _: ArithmeticException  => Resume
+    case _: NullPointerException => Restart
+    case _: Exception            => Escalate
+  }
+}
+```
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## This was
+
+# Akka
+<br/><br/>
+## Well.. it&#39;s a start..
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section data-markdown><script type="text/template">
+## We have much more
+
+![Akka More](assets/akka-more.png "Akka More")
+</script></section>
+
+<!-- ########################################################################################### -->
+
+<section>
+<h2>Get It and Learn More</h2>
+<ul>
+    <li><a href="http://akka.io">akka.io</a></li>
+    <li><a href="http://letitcrash.com">letitcrash.com</a></li>
+    <li><a href="https://typesafe.com/activator">Akka Tutorials</a></li>
+    <li>
+        <a href="https://twitter.com/akkateam" class="twitter-follow-button" data-show-count="true">Follow @akkateam</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </li>
+</ul>
+</section>
+
+</section> 
+
+</div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+<link rel="stylesheet" href="lib/css/fullscreen-img.css">
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'lib/js/fullscreen-img.js' }
+        ]
+    });
+
+</script>
+
+</body>
+</html>
