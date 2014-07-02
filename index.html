@@ -515,7 +515,7 @@ akka {
 
 - Implement a Finite State Machine (FSM)
 - Let a highly contended Actor adaptively transform himself into an Actor Pool or a Router
-- Implement graceful degradation
+- Implement graceful degradation (Fehlertoleranz)
 - Spawn up (empty) generic Worker Actors that can become whatever the Master currently needs
 </script></section>
 
@@ -525,15 +525,19 @@ akka {
 ## Become (Java)
 
 ``` java
-// Actor context available within an Actor
-getContext().become(new Procedure<Object>() {
+Procedure<Object> happy = new Procedure<Object>() {
   public void apply(Object msg) {
-    if(msg instanceof NewMessage) {
-      NewMessage newMsg = (NewMessage) msg;
+    if(msg instanceof HappyMessage) {
+      HappyMessage happyMsg = (HappyMessage) msg;
       ...
     }
   }
 });
+
+public void onReceive(Object msg) {
+  if(msg instanceof HappyMessage)
+    getContext.become(happy);
+}
 ```
 </script></section>
 
@@ -543,8 +547,12 @@ getContext().become(new Procedure<Object>() {
 ## Become (Scala)
 
 ``` scala
-context become {
-  case NewMessage => ...  
+def happy: Receive = {
+  case HappyMessage => ...
+}
+
+def receive = {
+  case HappyMessage => context become(happy)
 }
 ```
 </script></section>
@@ -775,7 +783,7 @@ class Supervisor extends Actor {
 <ul>
     <li><a href="http://akka.io">akka.io</a></li>
     <li><a href="http://letitcrash.com">letitcrash.com</a></li>
-    <li><a href="https://typesafe.com/activator">Akka Tutorials</a></li>
+    <li><a href="https://typesafe.com/activator/templates">Akka Tutorials</a></li>
     <li>
         <a href="https://twitter.com/akkateam" class="twitter-follow-button" data-show-count="true">Follow @akkateam</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
